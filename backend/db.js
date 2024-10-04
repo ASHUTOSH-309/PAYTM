@@ -1,43 +1,52 @@
 // Load environment variables
 require('dotenv').config();
 
-const MONGO_URL=process.env.MONGO_DB_CONNECTION_URL;
-console.log(MONGO_URL)
-const mongoose = require("mongoose");
-mongoose.connect(MONGO_URL)
-    .then(() => {
+const MONGO_URL = process.env.MONGO_DB_CONNECTION_URL;
 
-        console.log("Succesfully connected to the database");
-    })
-    .catch(() => {
+// backend/db.js
+const mongoose = require('mongoose');
 
-        console.log("Seems like an issue caused")
-    });
+mongoose.connect(MONGO_URL).then(() => {
 
+    console.log("Succesfully connected to the database");
+}).catch(() => {
 
-const userSchema = mongoose.Schema({
-    username: String,
-    password: String,
-    firstName: String,
-    lastName: String
-})
+    console.log("Seems like an issue caused")
+});
 
+// Create a Schema for Users
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        lowercase: true,
+        minLength: 3,
+        maxLength: 30
+    },
+    password: {
+        type: String,
+        required: true,
+        minLength: 6
+    },
+    firstName: {
+        type: String,
+        required: true,
+        trim: true,
+        maxLength: 50
+    },
+    lastName: {
+        type: String,
+        required: true,
+        trim: true,
+        maxLength: 50
+    }
+});
 
-const User = mongoose.model("User", userSchema);
-
-User.create({
-    username: "The Great Ashum2",
-    password: "1234566",
-    firstName: "Mahantam",
-    lastName: "Ashu"
-})
-    .then((user) => {
-        console.log("User created successfully:", user);
-    })
-    .catch((err) => {
-        console.log("Error creating user:", err);
-    });
+// Create a model from the schema
+const User = mongoose.model('User', userSchema);
 
 module.exports = {
     User
-}
+};
