@@ -29,7 +29,7 @@ router.post("/signup", async (req, res) => {
         username: body.username
     })
 
-    if (user._id) {
+    if (user) {
         return res.json({
             message: "Email already Taken/ Incorrect Inputs"
         })
@@ -43,6 +43,15 @@ router.post("/signup", async (req, res) => {
         password: req.body.password,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+    })
+
+    const userId = dbUser._id;
+
+    /// ----- Create new account ------
+
+    await Account.create({
+        userId,
+        balance: 1 + Math.random() * 10000
     })
 
 
@@ -112,7 +121,7 @@ router.put("/", authMiddleware, async (req, res) => {
             message: "Invalid Inputs/Error While updating"
         })
     }
- 
+
     await User.updateOne(req.body, {
         _id: req.userId
     })
