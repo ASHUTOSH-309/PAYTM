@@ -17,7 +17,9 @@ const authMiddleware=(req,res,next)=>{
     const token=authHeader.split(' ')[1];
 
     try{
-            const decoded=jwt.verify(token,JWT_SECRET)
+            const decoded=jwt.verify(token,JWT_SECRET)/* Will extract payload and along with secret, the signature will be regenerated
+            after that signature matching will happen, if everything went right then decoded data will be assigned 
+            */
             if(decoded.userId){
                 req.userId=decoded.userId;
                 next();
@@ -29,6 +31,8 @@ const authMiddleware=(req,res,next)=>{
     catch(err){
         return res.status(403).json({})
     }
+}
 
-
+module.exports = {
+    authMiddleware
 }
