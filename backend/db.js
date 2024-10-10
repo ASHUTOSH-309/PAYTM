@@ -47,6 +47,24 @@ const userSchema = new mongoose.Schema({
 // Create a model from the schema
 const User = mongoose.model('User', userSchema);
 
+
+const accountSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId, // Reference to User model
+        ref: 'User',
+        required: true
+    },
+    /* In simpler terms, ref: 'User' means that this userId is referencing an ID from the User collection. Mongoose can use this reference to automatically link an account to its corresponding user. */
+    balance: {
+        type: Number,
+        required: true
+    }
+});
+
+const Account = mongoose.model('Account', accountSchema);
+
+
+
 module.exports = {
-    User
+    User,Account
 };
