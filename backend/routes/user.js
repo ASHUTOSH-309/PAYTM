@@ -18,6 +18,7 @@ const signupSchema = zod.object({
 router.post("/signup", async (req, res) => {
 
     const body = req.body;
+ 
     const { success } = signupSchema.safeParse(req.body)
 
   
@@ -62,8 +63,8 @@ router.post("/signup", async (req, res) => {
     const token = jwt.sign({
         userId: dbUser._id
     }, JWT_SECRET)
-
-    return res.json({
+    
+    return res.status(201).json({
         message: "User created Succesfully",
         token: token
     })
