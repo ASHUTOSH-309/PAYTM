@@ -1,9 +1,9 @@
 const express = require("express");
-const { User } = require("../db")
+const { User, Account } = require("../db")
 const zod = require("zod");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = require("../config");
+const {JWT_SECRET} = require("../config");
 const { authMiddleware } = require("../middleware");
 
 const signupSchema = zod.object({
@@ -20,15 +20,17 @@ router.post("/signup", async (req, res) => {
     const body = req.body;
     const { success } = signupSchema.safeParse(req.body)
 
+  
     if (!success) {
         return res.status(411).json({
             message: "Invalid inputs/Email already taken"
         })
     }
-    const user = User.findOne({
+    const user =await User.findOne({
         username: body.username
     })
 
+   
     if (user) {
         return res.json({
             message: "Email already Taken/ Incorrect Inputs"
@@ -45,6 +47,7 @@ router.post("/signup", async (req, res) => {
         lastName: req.body.lastName,
     })
 
+    console.log(dbUser)
     const userId = dbUser._id;
 
     /// ----- Create new account ------
