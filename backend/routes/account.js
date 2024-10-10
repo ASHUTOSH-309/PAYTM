@@ -1,5 +1,5 @@
 const express = require("express");
-const { Account } = require("../db");
+const { Account, User } = require("../db");
 
 
 const router = express.Router();
@@ -22,15 +22,67 @@ This is what is called a `transaction` in a database. We need to implement a `tr
 
 /* An endpoint for user to get their balance. */
 
-router.get("/balance",async (req,res)=>{
-    const account=await Account.findOne({
+router.get("/balance", async (req, res) => {
+    const account = await Account.findOne({
         userId: req.userId
     })
     return res.status(200).json({
-        balance:account.balance
+        balance: account.balance
     })
 })
 
+/* 
+An endpoint for user to transfer money to another account
+*/
+
+router.post("/transfer", async (req, res) => {
+
+    const { to, amount } = req.body;
+
+
+    const sender = await Account.findOne({
+        _id: req.userId
+    })
+
+    if (sender.balance < amount) {
+        return res.json({
+            msg: "Insufficent balance in the account"
+        })
+    }
+
+    const receiver = await Account.findOne({
+        userId: to
+    })
+
+    if (!receiver) {
+        return res.status(400).json({
+            message: "Invalid user Account"
+        })
+    }
+    // Debiting the sender's account
+    await Account.updateOne({
+        userId: req.userId
+    }, {
+        $inc: {
+            balance: -amount
+        }
+    })
+
+    //Crediting the receiver's account
+    await Account.updateOne({
+        userId: to
+    }, {
+        $inc: {
+            balance: amount
+        }
+    })
+
+
+    return res.status(200).json({
+        message: "Transaction done succesfully"
+    })
+
+})
 
 
 
