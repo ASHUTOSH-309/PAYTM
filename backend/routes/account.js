@@ -44,15 +44,17 @@ router.get("/balance",authMiddleware, async (req, res) => {
 An endpoint for user to transfer money to another account
 */
 
-router.post("/transfer", authMiddleware, async (req, res) => {
+router.put("/transfer", authMiddleware, async (req, res) => {
     const session = await mongoose.startSession();
 
     session.startTransaction();
     const { amount, to } = req.body;
+    console.log(req.body)
 
     // Fetch the accounts within the transaction
+    console.log(req.userId)
     const account = await Account.findOne({ userId: req.userId }).session(session);
-
+    console.log(account)
     if (!account || account.balance < amount) {
         await session.abortTransaction();
         return res.status(400).json({
@@ -60,8 +62,8 @@ router.post("/transfer", authMiddleware, async (req, res) => {
         });
     }
 
-    const toAccount = await Account.findOne({ userId: to }).session(session);
-
+    let toAccount = await Account.findOne({ userId:new mongoose.Types.ObjectId(to) }).session(session);
+    console.log(toAccount)
     if (!toAccount) {
         await session.abortTransaction();
         return res.status(400).json({
