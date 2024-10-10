@@ -1,6 +1,7 @@
 const express = require("express");
 const { Account } = require("../db");
-const mongoose=require("mongoose")
+const mongoose=require("mongoose");
+const { authMiddleware } = require("../middleware");
 
 const router = express.Router();
 
@@ -22,10 +23,18 @@ This is what is called a `transaction` in a database. We need to implement a `tr
 
 /* An endpoint for user to get their balance. */
 
-router.get("/balance", async (req, res) => {
+router.get("/balance",authMiddleware, async (req, res) => {
+    console.log("Hi")
     const account = await Account.findOne({
         userId: req.userId
     })
+
+    if(!account){
+        return res.status(400).json({
+
+            msg:"Invalid account/User Not found"
+        })
+    }
     return res.status(200).json({
         balance: account.balance
     })
