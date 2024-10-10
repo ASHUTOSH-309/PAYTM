@@ -4,7 +4,7 @@ const userRouter=require("./user")
 const accountRouter = require("./account");
 const router=express.Router();
 
-
+//path --> /api/v1
 router.use("/user",userRouter);
 router.use("/account", accountRouter);
 
