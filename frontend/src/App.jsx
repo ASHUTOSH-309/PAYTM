@@ -4,12 +4,14 @@ import Dashboard from "./components/Dashboard"
 import SendMoney from "./components/SendMoney"
 import Signin from "./components/Signin"
 import Signup from "./components/Signup"
+import TestTailwind from "./components/TestTailwind";
 
 
 
   function App() {
     return (
       <>
+      <TestTailwind />
          <BrowserRouter>
           <Routes>
             <Route path="/signup" element={<Signup />} />
