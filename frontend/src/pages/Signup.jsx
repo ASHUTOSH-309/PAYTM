@@ -49,7 +49,7 @@ const Signup = () => {
         <SubHeading label={"Enter your infromation to create an account"} />
         <InputBox placeholder="John" label={"First Name"} />
         <InputBox placeholder="Doe" label={"Last Name"} />
-        <InputBox placeholder="harkirat@gmail.com" label={"Email"} />
+        <InputBox placeholder="ashutosh@gmail.com" label={"Email"} />
         <InputBox placeholder="123456" label={"Password"} />
         <div className="pt-4">
           <Button label={"Sign up"} />
