@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export const SendMoney = () => {
 
@@ -9,6 +9,7 @@ export const SendMoney = () => {
   const name = searchParams.get("name")
   const [amount, setAmount] = useState(0);
 
+  const navigate=useNavigate()
 
 
   const TransferMoney = () => {
@@ -32,6 +33,7 @@ export const SendMoney = () => {
     axios.request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
+        navigate("/dashboard")
       })
       .catch((error) => {
         console.log(error);
